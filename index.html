@@ -11,6 +11,192 @@
       'packages': ['table']
     });
   </script>
+    <script type="text/javascript">
+        //init variables
+var userPosition = new google.maps.LatLng(38.722715, -9.340362);
+var pinUser;
+var showTipo;
+var markerCluster;
+var firstRun = 0;
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(showPosition);
+} else {
+  alert("Geolocation is not supported by this browser.");
+}
+
+function showPosition(position) {
+  userPosition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+}
+
+gmKey = "AIzaSyD12-z3oc-pkYf-HnYO0fwHwu3RpA4F7JI"
+var pin1fechado = new google.maps.MarkerImage("https://docs.google.com/uc?id=0B30sCBP_rdwYZUlNbWRXUFRiY1U",
+  new google.maps.Size(22, 23),
+  new google.maps.Point(0, 0),
+  new google.maps.Point(11, 11));
+var pin2fechado = new google.maps.MarkerImage("https://docs.google.com/uc?id=0B30sCBP_rdwYOFJhcm5BSHVPRW8",
+  new google.maps.Size(22, 23),
+  new google.maps.Point(0, 0),
+  new google.maps.Point(11, 11));
+var pin3fechado = new google.maps.MarkerImage("https://docs.google.com/uc?id=0B30sCBP_rdwYbDM5V0UtRF80Wm8",
+  new google.maps.Size(22, 23),
+  new google.maps.Point(0, 0),
+  new google.maps.Point(11, 11));
+var pin4fechado = new google.maps.MarkerImage("https://docs.google.com/uc?id=0B30sCBP_rdwYbVlRMlBCa1NCRzQ",
+  new google.maps.Size(22, 23),
+  new google.maps.Point(0, 0),
+  new google.maps.Point(11, 11));
+var pin1via = new google.maps.MarkerImage("https://docs.google.com/uc?id=0B30sCBP_rdwYV1FockFSdXZQZ28",
+  new google.maps.Size(22, 23),
+  new google.maps.Point(0, 0),
+  new google.maps.Point(11, 11));
+var pin2via = new google.maps.MarkerImage("https://docs.google.com/uc?id=0B30sCBP_rdwYWEZRTVNyWkZROUE",
+  new google.maps.Size(22, 23),
+  new google.maps.Point(0, 0),
+  new google.maps.Point(11, 11));
+var pin3via = new google.maps.MarkerImage("https://docs.google.com/uc?id=0B30sCBP_rdwYVnY2ZnBTN2pkSFk",
+  new google.maps.Size(22, 23),
+  new google.maps.Point(0, 0),
+  new google.maps.Point(11, 11));
+var pin4via = new google.maps.MarkerImage("https://docs.google.com/uc?id=0B30sCBP_rdwYa1ZaMzVyUGJobjA",
+  new google.maps.Size(22, 23),
+  new google.maps.Point(0, 0),
+  new google.maps.Point(11, 11));
+var pin1gratuito = new google.maps.MarkerImage("https://docs.google.com/uc?id=0B30sCBP_rdwYdjczUGxhaDllc1k",
+  new google.maps.Size(22, 23),
+  new google.maps.Point(0, 0),
+  new google.maps.Point(11, 11));
+var pin2gratuito = new google.maps.MarkerImage("https://docs.google.com/uc?id=0B30sCBP_rdwYb3I3RVQ0eW9ISWs",
+  new google.maps.Size(22, 23),
+  new google.maps.Point(0, 0),
+  new google.maps.Point(11, 11));
+var pin3gratuito = new google.maps.MarkerImage("https://docs.google.com/uc?id=0B30sCBP_rdwYV2Fja2pGSFVDalE",
+  new google.maps.Size(22, 23),
+  new google.maps.Point(0, 0),
+  new google.maps.Point(11, 11));
+var pin4gratuito = new google.maps.MarkerImage("https://docs.google.com/uc?id=0B30sCBP_rdwYV0t6ckdsQ3J6cDQ",
+  new google.maps.Size(22, 23),
+  new google.maps.Point(0, 0),
+  new google.maps.Point(11, 11));
+
+// Add a marker clusterer to manage the markers.
+var map = new google.maps.Map(document.getElementById('map'), {
+  zoom: 13,
+  mapTypeId: 'terrain',
+  center: {
+    lat: 38.722715,
+    lng: -9.340362
+  }
+});
+
+/*
+if (userPosition) {
+  userPosition = new google.maps.LatLng(38.722715, -9.340362);
+}
+*/
+pinUser = new google.maps.Marker({
+  position: userPosition,
+  map: map,
+  title: "Ponto de partida",
+  draggable: true
+});
+
+function main() {
+  //Get Estacionamentos from Fusion Table
+  markerCluster = "";
+  showTipo = document.getElementById("selectorForm").value;
+  var POIS = new Array();
+  var queryEstacionamentos = encodeURIComponent('SELECT lat,lng,nome,lugares,linha,tipo,icon,tarifarioQuarto,tarifarioHora,tarifarioDia,Abertura,Fecho FROM 17OY4umJCfeqirQ8LdnlIdoBOyYoaSoK86BG65eK_'); // WHERE ST_INTERSECTS(lng,CIRCLE(LATLNG('+userPosition.lat+','+userPosition.lng+'),15000)) WHERE \'tipo\' CONTAINS IGNORING CASE \'fechado\'');
+  //var queryEstacionamentos = encodeURIComponent('SELECT lat,lng,nome,lugares,linha,tipo,icon,tarifarioQuarto,tarifarioHora,tarifarioDia,Abertura,Fecho FROM 17OY4umJCfeqirQ8LdnlIdoBOyYoaSoK86BG65eK_ WHERE tipo CONTAINS IGNORING CASE \'' + showTipo + '\''); // WHERE ST_INTERSECTS(lng,CIRCLE(LATLNG('+userPosition.lat+','+userPosition.lng+'),15000)) WHERE \'tipo\' CONTAINS IGNORING CASE \'fechado\'');
+  var gvizEstacionamentosQuery = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + queryEstacionamentos);
+  gvizEstacionamentosQuery.send(function(response) {
+
+    function loadPOIS2(item) {
+      POIS.push({
+        lat: parseFloat(item.c[0].v),
+        lng: parseFloat(item.c[1].v),
+        nome: item.c[2].v,
+        lugares: parseInt(item.c[3].v),
+        linha: parseInt(item.c[4].v),
+        tipo: item.c[5].v,
+        icon: item.c[6].v,
+        tarifario15mins: parseFloat(item.c[7].v).toFixed(2),
+        tarifario1hora: parseFloat(item.c[8].v).toFixed(2),
+        tarifario24horas: parseFloat(item.c[9].v).toFixed(2),
+        horarioAbertura: item.c[10].v,
+        horarioFecho: item.c[11].v
+      });
+    };
+    POIS = [];
+    response.G.Nf.forEach(loadPOIS2);
+    var locations = POIS;
+    console.log(locations)
+    // Add some markers to the map.
+    // Note: The code uses the JavaScript Array.prototype.map() method to
+    // create an array of markers based on a given "locations" array.
+    // The map() method here has nothing to do with the Google Maps API.
+
+    var markers = locations.map(function(location, i) {
+      if (locations[i].tipo == "via pública") {
+        tipo = "via";
+      } else {
+        tipo = locations[i].tipo;
+      };
+      eval("icone = pin" + locations[i].linha + tipo)
+
+      infoStr = "<img src='" + icone.url + "' align=left>&nbsp;<h3>" + locations[i].nome + "</h3><table border=1 cellspacing=0 cellpadding=2>";
+      infoStr = infoStr + "<tr><td><b>Lugares:</td><td align=right>" + locations[i].lugares + "</td></tr>"
+      if (isNaN(locations[i].tarifario15mins)) {
+        locations[i].tarifario15mins = 0;
+        locations[i].tarifario1hora = 0;
+        locations[i].tarifario24horas = 0;
+      }
+      infoStr = infoStr + "<tr><td valign=top><b>Tarifário:</td><td><table border=0 cellspacing=0 cellpadding=0 width=100%><tr><td>15 mins:</td><td align=right>" + locations[i].tarifario15mins + " €</td></tr><tr><td>1 hora:</td><td align=right>" + locations[i].tarifario1hora + " €</td></tr><tr><td>Dia:</td><td align=right>" + locations[i].tarifario24horas + " €</td></tr></table></td></tr>"
+      if (locations[i].horarioAbertura) {
+        horaAbertura = locations[i].horarioAbertura[0];
+        minutoAbertura = locations[i].horarioAbertura[1];
+        horaFecho = locations[i].horarioFecho[0];
+        minutoFecho = locations[i].horarioFecho[1];
+      } else {
+        horaAbertura = 0;
+        minutoAbertura = 0;
+        horaFecho = 0;
+        minutoFecho = 0;
+      }
+      infoStr = infoStr + "<tr><td valign=top><b>Horário:</td><td><table border=0 cellspacing=0 cellpadding=0 width=100%><tr><td>Abertura:</td><td align=right>" + horaAbertura + "h" + minutoAbertura + "m</td></tr><tr><td>Fecho:</td><td align=right>" + horaFecho + "h" + minutoFecho + "m</td></tr>"
+      infoStr = infoStr + "</table>"
+      var infoWindow = new google.maps.InfoWindow({
+        content: infoStr
+      });
+      //return new google.maps.Marker({
+      var marker
+      if (marker) {
+        marker = null;
+      }
+      marker = new google.maps.Marker({
+        position: location,
+        title: locations[i].nome,
+        icon: icone
+      });
+      marker.addListener('click', function() {
+        infoWindow.open(map, marker);
+      });
+      return marker;
+
+    });
+    
+    
+    markerCluster = new MarkerClusterer(map, markers, {
+        imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
+      });
+
+    
+
+  });
+
+}
+var trafficLayer = new google.maps.TrafficLayer();
+trafficLayer.setMap(map);
+    </script>
   </head>
   <body onload="main()">
     <div id="map" name="map"></div>
