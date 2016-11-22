@@ -1,0 +1,40 @@
+<html>
+<head>
+<meta charset="utf-8">
+    <title>PARC: Parques e Estacionamento</title>
+    
+ 
+    
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+    google.load('visualization', '1', {
+      'packages': ['table']
+    });
+  </script>
+  </head>
+  <body onload="main()">
+    <div id="map" name="map"></div>
+    <div id="selector">
+    <img src="https://parc.pt/wp-content/uploads/2016/05/logo-simbolo.png" id="logoparc">
+    <table border=0>
+      <tr>
+        <td>Tipo de estacionamento:</td>
+        <td align=right><select id="selectorForm" onchange="main()">
+      <option value="fechado" selected>Parque fechado</option>
+      <option value="via pública">Via pública</option>
+      <option value="gratuito">Gratuito</option>
+      </select></td>
+      </tr>
+      <tr>
+        <td>Modo de intersecção:</td>
+        <td align=right><select id="interceptForm" onchange="main()">
+        <option value="">Aresta</option>
+      <option value="_pos" selected>Centro</option>
+      </select></td>
+      </tr>
+
+    </table>
+  </div>
+    
+</body>
+</html>
