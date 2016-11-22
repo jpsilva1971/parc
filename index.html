@@ -1,6 +1,84 @@
 <html>
 <head>
 <meta charset="utf-8">
+    <style>
+        #map {
+  height: 100%;
+  width: 100%;
+}
+
+#resultado {
+  position: absolute;
+  top: 40px;
+  left: 10px;
+  z-index: 99;
+  font-size:11pt;
+  font-family: Arial,Helvetica;
+  border-top: 2px solid grey;
+  border-left: 2px solid grey;
+  border-right: 3px solid black;
+  border-bottom: 3px solid black;
+  border-radius: 4px;
+  background:rgba(255, 255, 255, 0.6);
+  padding:3px;
+}
+#tabela {
+  border: 1px solid black;
+}
+
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+#map{
+  height: 100%;
+  width: 100%;
+}
+#logoparc {
+  -webkit-filter: invert(100%); 
+  filter: invert(100%);
+}
+#selector {
+  position: absolute;
+  top: 15px;
+  left: 5px;
+  z-index: 99;
+  font-size:11pt;
+  font-family: Arial,Helvetica;
+  border-top: 2px solid grey;
+  border-left: 2px solid grey;
+  border-right: 3px solid black;
+  border-bottom: 3px solid black;
+  border-radius: 4px;
+  background:rgba(255, 255, 255, 0.7);
+  padding:3px;
+}
+#selectorForm,#interceptForm {
+   z-index: 99;
+  font-size:9pt;
+  font-family: Arial,Helvetica;
+  border:0px solid black;
+  background:rgba(255, 255, 255, 0);
+  padding:3px;
+}
+#pac-input {
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  margin-left: 0px;
+  padding: 0 11px 0 13px;
+  text-overflow: ellipsis;
+  width: 200px;
+  color:black;
+}
+
+#pac-input:focus {
+  border-color: #4d90fe;
+}
+    </style>
     <title>PARC: Parques e Estacionamento</title>
     
  
